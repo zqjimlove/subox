@@ -1,0 +1,99 @@
+body {
+    font-family: PingFang SC, Lantinghei SC, Helvetica Neue, Helvetica, Arial, Microsoft YaHei, STHeitiSC-Light, simsun, WenQuanYi Zen Hei, WenQuanYi Micro Hei, "sans-serif";
+    font-size: 13px;
+    color: #222;
+}
+
+.top-bar_title {
+    padding-left: 2px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.media-path {
+    padding: 6px 10px;
+    font-size: 12px;
+    line-height: 1;
+    color: #666;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.download-dialog-header {
+    margin: -16px -16px 0;
+}
+
+.download-dialog-header_title {
+    width: 100% !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.download-dialog-status {
+    margin: 0 -16px -16px!important;
+    padding: 8px;
+    border-top: 1px solid #e6e6e6;
+}
+
+.download-dialog-table {
+    margin: 0 -16px!important;
+    max-height: 400px;
+    overflow-y: scroll;
+    width: auto;
+    table {
+        margin-bottom: 0;
+    }
+}
+
+.download-dialog-lables {
+    span {
+        margin-right: 0.1em;
+        margin-left: 0.1em;
+    }
+}
+
+.tiny-label {
+    font-size: 12px;
+}
+
+.empty {
+    text-align: center;
+    padding: 100px 0;
+}
+
+.media-table__path {
+    font-size: 12px;
+    margin-bottom: 0;
+    color: #666;
+}
+
+#aboutDialog {
+    padding: 0 0 12px;
+    .about-title {
+        position: relative;
+        padding: 4px 26px;
+        border-bottom: 4px solid #eee;
+        font-size: 15px;
+        color: #555;
+        font-weight: bolder;
+        &::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            top: 10px;
+            left: 10px;
+            background: #f34b3f;
+            border-radius: 2px;
+        }
+    }
+    p {
+        padding: 0 12px;
+    }
+    .close-button {
+        top:4px;
+    }
+}
+
+@import 'loading';
