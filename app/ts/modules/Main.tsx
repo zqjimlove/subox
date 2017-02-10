@@ -15,7 +15,6 @@ import { changeMediaPathAction } from '../actions'
 
 class Main extends React.Component<{ dispatch: Function }, undefined> {
     componentDidMount() {
-        alert('123')
         Db.common.findOne({ _id: 'setting' }, (err, doc) => {
             if (err) alert(`读取配置出错：${err}`);
             else if (doc) {

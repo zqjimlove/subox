@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Link, Button, Colors } from "react-foundation";
 import { connect } from 'react-redux'
 
 import { searchSubTitle } from '../actions'
