@@ -38,7 +38,7 @@ body {
 .download-dialog-table {
     margin: 0 -16px!important;
     max-height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: auto;
     table {
         margin-bottom: 0;

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Link, Button, Colors } from "react-foundation";
 import { connect } from 'react-redux'
 
 import { showSettingDialogAction } from '../actions'
@@ -25,7 +24,7 @@ class TopBar extends React.Component<{ dispatch: Function, setting: Setting }, u
                     <div className="top-bar-right">
                         <ul className="menu">
                             <li>
-                                <Button onClick={() => { this.showSetingDialogHandler() }}>设置</Button>
+                                <button className="button" onClick={() => { this.showSetingDialogHandler() }}>设置</button>
                             </li>
                         </ul>
                     </div>

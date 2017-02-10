@@ -15,12 +15,16 @@ import FileWatch from './services/FileWatch';
 
 import SetMenu from './Menu';
 
+import CheckUpdate from './services/CheckUpdate';
+
+
+CheckUpdate.check();
 SetMenu(reduxStore);
 FileWatch.store = reduxStore;
+
 export default class App {
     static app() {
         ReactDOM.render(<Provider store={reduxStore}><Main /></Provider>, document.getElementById('App'));
     }
 }
-
 App.app();

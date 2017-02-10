@@ -6,7 +6,6 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
-const process = require('process')
 
 const { nativeImage } = electron;
 
@@ -36,7 +35,7 @@ function createWindow() {
     }))
 
     // Open the DevTools.
-    if (process.env.ELECTRON_ENV === 'development')
+    // if (process.env.ELECTRON_ENV && process.env.ELECTRON_ENV === 'development')
         mainWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.

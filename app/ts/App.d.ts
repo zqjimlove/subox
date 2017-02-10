@@ -16,6 +16,8 @@ interface SubTitleObj {
 declare module "*.png" {
     let __a__: string;
     export = __a__;
-    // let __a__: string;
-    // export default __a__;
+}
+
+declare module "*package.json" {
+    export const asarVersion: string;
 }

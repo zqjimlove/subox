@@ -5,13 +5,16 @@ import * as Path from 'path';
 import * as Http from 'http';
 import * as fs from 'fs';
 import * as fileType from 'file-type';
-import * as unzip from 'unzip';
 // import * as RarArchive from 'rarjs';
 
 const jsdom = electron.require('jsdom')
 const AdmZip = electron.require('adm-zip')
 
 const subfile_exts = [".srt", ".sub", ".smi", ".ssa", ".ass"];
+
+const fsErrorLog = (err) => {
+    err && console.error(err);
+}
 
 export interface SearchServiceInterface {
     search(name, isCustromName);
@@ -28,9 +31,32 @@ function getExt(fileName) {
     }
 }
 
+const removeAllInfoRegex = /([\[(][^()\[\]]*((?![^\[(])|[\])]*)|[^\[\]()]*[\])])/g;
+const getWordRegx = /(\b[A-Z][a-z\-_']+\b)[\.\s]?/g;
+function getSearchTextFromFileName(name: string): string {
+    //提取英文单词
+    let matchs, keyword, keywords = [];
+    while (matchs = getWordRegx.exec(name)) {
+        keyword = matchs[1]
+        keywords.push(keyword);
+    }
+    getWordRegx.lastIndex = 0;
+    if (keywords.length > 1) {
+        return keywords.join(' ');
+    }
+
+    //去除括号、中括号的信息然后提取文字。
+    let result = name.replace(removeAllInfoRegex, '').replace(/\s+/, '.').split('.');
+    if (result.length > 1) {
+        return result.join(' ');
+    }
+
+    //都不行，返回原文
+    return name;
+}
+
 
 export abstract class SearchServiceImpl implements SearchServiceInterface {
-    private getWordRegx = /(\b[A-Z][a-z\-_']+\b)[\.\s]?/g;
     protected lang_list = ['双语', '简体', '繁体', '英文'];
     protected download_path = Path.join(electron.app.getPath('temp'), 'temp_subtitle_download');
     protected jsdom = jsdom;
@@ -40,16 +66,7 @@ export abstract class SearchServiceImpl implements SearchServiceInterface {
             return []
         }
         if (!isCustromName) {
-            let keywords = [];
-            this.getWordRegx.lastIndex = 0;
-            let keyword;
-            let matchs;
-            while (matchs = this.getWordRegx.exec(name)) {
-                keyword = matchs[1]
-                keywords.push(keyword);
-            }
-            let searchText = keywords.slice(0, 2).join(' ');
-            return this.searchFromServer(searchText);
+            return this.searchFromServer(getSearchTextFromFileName(name));
         } else {
             return this.searchFromServer(name);
         }
@@ -79,6 +96,7 @@ export abstract class SearchServiceImpl implements SearchServiceInterface {
                 fs.createReadStream(filePath).pipe(fs.createWriteStream(Path.join(Path.dirname(mediaFileObj.path), mediaFileObj.name + getExt(filePath))));
                 percentCallBack('下载完成')
             }
+            fs.unlink(filePath, fsErrorLog);
         });
     }
     private unzipFile(filePath, mediaFileObj) {
@@ -106,7 +124,9 @@ export abstract class SearchServiceImpl implements SearchServiceInterface {
                 if (stat.isFile() && subfile_exts.indexOf(Path.extname(file)) > -1) {
                     fs.createReadStream(path).pipe(fs.createWriteStream(Path.join(Path.dirname(mediaFileObj.path), mediaFileObj.name + getExt(file))));
                 }
-            })
+                fs.unlink(path, fsErrorLog);
+            });
+            fs.rmdir(outdir, fsErrorLog);
             res()
         })
     }
