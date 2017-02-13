@@ -9,8 +9,8 @@ import * as Path from 'path';
 import * as asar from 'asar';
 // const asar = electron.require('asar');
 
-const checkUrl = 'https://raw.githubusercontent.com/zqjimlove/subox/1.0.0/package.json';
-const AppJSUrl = 'https://cdn.rawgit.com/zqjimlove/subox/1.0.0/app/App.js';
+const checkUrl = 'https://cdn.rawgit.com/zqjimlove/subox/master/package.json';
+const AppJSUrl = 'https://cdn.rawgit.com/zqjimlove/subox/master/app/App.js';
 const AppJSPaht = Path.join(electron.app.getAppPath(), '../app.asar.unpacked/', '/app', '/App.js');
 const curAsarVersion = parseInt(asarVersion.replace('.', ''))
 
