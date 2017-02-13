@@ -1,11 +1,13 @@
 import { remote as electron } from 'electron';
 import * as React from "react";
 import { connect } from 'react-redux';
-import { closeSettingDialogAction, changeMediaPathAction } from '../actions';
+import { closeSettingDialogAction, changeSettingAction } from '../actions';
 import Db from '../Db';
+import A from '../components/SheelA';
 
 class SettingDialog extends React.Component<{ show: boolean, dispatch: Function, setting: Setting }, Setting> {
     private isMediaPathChange: boolean = false;
+    private ignoredRulesInput: HTMLInputElement;
     constructor() {
         super();
         this.state = {};
@@ -20,7 +22,7 @@ class SettingDialog extends React.Component<{ show: boolean, dispatch: Function,
         Db.common.update({ _id: 'setting' }, { _id: 'setting', ...this.state }, { upsert: true }, (err) => {
             if (err) alert(`Save setting error:${err}`);
             else {
-                this.props.dispatch(changeMediaPathAction(this.state))
+                this.props.dispatch(changeSettingAction(this.state))
                 this.props.dispatch(closeSettingDialogAction())
                 // if (this.isMediaPathChange) {
                 //     this.props.dispatch(updateMediaFiles(MediaFind.find(this.state.mediaPath)))
@@ -40,8 +42,13 @@ class SettingDialog extends React.Component<{ show: boolean, dispatch: Function,
             });
         }
     }
+    ignoredRulesInputChangeHandler(...args) {
+        this.setState({
+            ignoredRules: this.ignoredRulesInput.value.toString()
+        })
+    }
     render() {
-        let {mediaPath} = this.state;
+        let {mediaPath, ignoredRules} = this.state;
         return (
             <div style={{ display: this.props.show ? 'block' : 'none' }} className="reveal-overlay">
                 <div style={{ display: this.props.show ? 'block' : 'none' }} className="reveal" id="settingDialog" data-reveal>
@@ -54,6 +61,17 @@ class SettingDialog extends React.Component<{ show: boolean, dispatch: Function,
                                 </div>
                             </div>
                             <p className="help-text">填写电影或剧集存放的绝对路径，软件将会检测目录下所有多媒体文件并匹配字幕</p>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="medium-12 columns">
+                            <label htmlFor="ignoredRules">
+                                文件忽略规则
+                                 <input onChange={this.ignoredRulesInputChangeHandler.bind(this)} ref={(input) => { this.ignoredRulesInput = input }} type="text" id="ignoredRules" placeholder="文件忽略规则" value={ignoredRules || ''} />
+                            </label>
+                            <p className="help-text">
+                                请查看<A href="https://github.com/isaacs/node-glob#glob-primer">文件过滤规则</A>，以半角字符“ | ”分割多个规则。
+                            </p>
                         </div>
                     </div>
                     {/*<div className="row">
@@ -86,6 +104,3 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps)(SettingDialog);
 
-export interface Setting {
-    mediaPath?: string
-}

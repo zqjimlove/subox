@@ -12,6 +12,11 @@ interface SubTitleObj {
     lang?: Array<string>
 }
 
+interface Setting {
+    mediaPath?: string,
+    ignoredRules?: string
+}
+
 
 declare module "*.png" {
     let __a__: string;

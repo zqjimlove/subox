@@ -8,8 +8,7 @@ import DownloadDialog from './DownloadDialog';
 import AboutDialog from './AboutDialog';
 import Db from '../Db';
 
-import MediaFind from '../services/MediaFind';
-import { changeMediaPathAction } from '../actions'
+import { changeSettingAction } from '../actions'
 
 // export interface HelloProps { compiler: string; framework: string; }
 
@@ -19,7 +18,7 @@ class Main extends React.Component<{ dispatch: Function }, undefined> {
             if (err) alert(`读取配置出错：${err}`);
             else if (doc) {
                 delete doc._id;
-                this.props.dispatch(changeMediaPathAction(doc));
+                this.props.dispatch(changeSettingAction(doc));
             }
         })
     }

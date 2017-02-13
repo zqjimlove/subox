@@ -42,7 +42,7 @@ function getSearchTextFromFileName(name: string): string {
     }
     getWordRegx.lastIndex = 0;
     if (keywords.length > 1) {
-        return keywords.join(' ');
+        return keywords.splice(0, 2).join('.');
     }
 
     //去除括号、中括号的信息然后提取文字。
@@ -68,13 +68,13 @@ export abstract class SearchServiceImpl implements SearchServiceInterface {
         if (!isCustromName) {
             return this.searchFromServer(getSearchTextFromFileName(name));
         } else {
-            return this.searchFromServer(name);
+            return this.searchFromServer(name.replace(/\s+/, '.'));
         }
 
     }
     public download(subTitleObj, mediaFileObj, percentCallBack) {
         this.getDownloadLink(subTitleObj, mediaFileObj).then((link) => {
-            return this.downloadFile(subTitleObj.id, link, percentCallBack);
+            return this.downloadFile(link, percentCallBack);
         }).then((downloadObj) => {
             let {type, filePath} = downloadObj;
             if (type) {
@@ -99,6 +99,9 @@ export abstract class SearchServiceImpl implements SearchServiceInterface {
             fs.unlink(filePath, fsErrorLog);
         });
     }
+    /**
+     * unzip the file and copy to the media dir
+     */
     private unzipFile(filePath, mediaFileObj) {
         return new Promise((res, rej) => {
             var zip = new AdmZip(filePath);
@@ -114,6 +117,9 @@ export abstract class SearchServiceImpl implements SearchServiceInterface {
             res()
         })
     }
+    /**
+     * unrar the file and copy to the media dir
+     */
     private unrarFile(filePath, mediaFileObj) {
         return new Promise((res, rej) => {
             let outdir = Unrar.unrar(filePath);
@@ -130,7 +136,10 @@ export abstract class SearchServiceImpl implements SearchServiceInterface {
             res()
         })
     }
-    private downloadFile(id, link, percentCallBack) {
+    /**
+     * doneload the subtitle file
+     */
+    private downloadFile(link, percentCallBack) {
         return new Promise((res, rej) => {
             try {
                 let type;

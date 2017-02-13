@@ -53,9 +53,22 @@ export default class CheckUpdate {
         this.downloadJS().then((filepath) => {
             console.log('脚本下载完成，开始替换。')
             fs.createReadStream(filepath).pipe(fs.createWriteStream(AppJSPaht));
-            if (confirm('Subox 更新了脚本，是否现在就重启？')) {
-                electron.BrowserWindow.getFocusedWindow().reload();
-            }
+
+            let {dialog, BrowserWindow} = electron.remote;
+
+            dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+                type: 'question',
+                buttons: [
+                    '重启', '暂时不重启'
+                ],
+                title: '有新的更新',
+                content: 'Subox 更新了脚本，是否现在就重启？',
+                cancelId: 1
+            }, (res) => {
+                if (res === 0) {
+                    electron.BrowserWindow.getFocusedWindow().reload();
+                }
+            });
         }, alert.bind(window))
     }
 }

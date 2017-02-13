@@ -13,7 +13,6 @@ var Platform = builder.Platform
 var electronInstaller = require('electron-winstaller');
 
 function buildTypeScript() {
-    console.log(webpackConfig)
     return new Promise(function(res, rej) {
         webpack(webpackConfig, function(err, stats) {
             if (!err) res();
@@ -80,6 +79,11 @@ var builderConfig = {
     },
     publish: {
         provider: 'github'
+    },
+    nsis: {
+        oneClick: false,
+        allowToChangeInstallationDirectory: true,
+        artifactName: '${productName}_${version}_Setup.${ext}'
     }
 };
 
@@ -103,5 +107,5 @@ function buildWin() {
 }
 
 var logE = console.error.bind(console)
-    // buildTypeScript().then(buildMac, logE).then(buildWin, logE).then(() => {}, logE)
-buildMac()
+buildTypeScript().then(buildMac, logE).then(buildWin, logE).then(() => {}, logE);
+// buildMac()
