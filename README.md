@@ -6,3 +6,7 @@ Subox是一个基于 [Electron](http://electron.atom.io/) 开发的以媒体资�
 
 
 ![预览](http://77g16l.com1.z0.glb.clouddn.com/QQ20170213-144842.png)
+
+## 下载
+
+[点击跳转下载页面](https://github.com/zqjimlove/subox/releases)
