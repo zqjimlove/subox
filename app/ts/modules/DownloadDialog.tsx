@@ -58,8 +58,8 @@ class DownloadDialog extends React.Component<{ show: boolean, dispatch: Function
             downloadStatus: assign({}, this.state.downloadStatus, donwloadState)
         });
     }
-    searchInputKeypressHandler(keyCode:number) {
-        if (keyCode === 13) {
+    searchInputKeypressHandler(event) {
+        if (event.keyCode === 13) {
             this.searchHanlder();
         }
     }
@@ -143,7 +143,7 @@ class DownloadDialog extends React.Component<{ show: boolean, dispatch: Function
                         </div>
                         <div className="top-bar-right">
                             <ul className="menu">
-                                <li><input onKeyPress={(e) => { this.searchInputKeypressHandler(e.nativeEvent.keyCode) }} ref={(searchInput) => { this.searchInput = searchInput }} type="search" placeholder="自定义搜索" /></li>
+                                <li><input onKeyPress={(e) => { this.searchInputKeypressHandler(e.nativeEvent) }} ref={(searchInput) => { this.searchInput = searchInput }} type="search" placeholder="自定义搜索" /></li>
                                 <li><button onClick={this.searchHanlder.bind(this)} type="button" className="button">搜索</button></li>
                                 <li> <button onClick={this.closeHandler.bind(this)} type="button" className="button alert">关闭</button></li>
                             </ul>

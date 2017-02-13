@@ -19,7 +19,7 @@ function createWindow() {
     let appIcon = nativeImage.createFromPath(path.join(app.getAppPath(), '/icons/icon.png'));
     mainWindow = new BrowserWindow({
         width: 1000,
-        height: 600,
+        height: 800,
         center: true,
         minWidth: 1000,
         minHeight: 400,
@@ -35,7 +35,7 @@ function createWindow() {
     }))
 
     // Open the DevTools.
-    // if (process.env.ELECTRON_ENV && process.env.ELECTRON_ENV === 'development')
+    if (process.env.ELECTRON_ENV && process.env.ELECTRON_ENV === 'development')
         mainWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.

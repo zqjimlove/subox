@@ -21,7 +21,7 @@ function natcmp(a, b) {
 }
 
 
-class MediaTable extends React.Component<{ dispatch: Function, files: Array<MediaFileObject>, setting: any }, undefined> {
+class MediaTable extends React.Component<{ dispatch: Function, files: Array<MediaFileObject>, setting: any, filterWrods: string }, undefined> {
 
     clickDownloadHandler(mediaObj) {
         this.props.dispatch(searchSubTitle(mediaObj))
@@ -36,10 +36,15 @@ class MediaTable extends React.Component<{ dispatch: Function, files: Array<Medi
             } else {
                 return natcmp(a.name, b.name);
             }
-        })
+        });
+
         files.forEach((mediaObj) => {
             let path = mediaObj.path.replace(mediaPath, '');
+            if (this.props.filterWrods && path.toLowerCase().indexOf(this.props.filterWrods.toLowerCase()) < 0) {
+                return true;
+            }
             path = path.substr(0, path.indexOf(mediaObj.name));
+
             resultHtml.push(
                 <tr key={mediaObj.name}>
                     <td>
@@ -76,7 +81,8 @@ class MediaTable extends React.Component<{ dispatch: Function, files: Array<Medi
 function mapStateToProps(state) {
     return {
         files: state.common.files || [],
-        setting: state.common.setting || {}
+        setting: state.common.setting || {},
+        filterWrods: state.common.mediaFilter
     }
 }
 

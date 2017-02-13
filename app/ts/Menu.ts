@@ -5,8 +5,18 @@ import { showSettingDialogAction } from './actions'
 export default function SetMenu(store) {
     const template = [];
 
+
+    template.push({
+        label: '编辑',
+        submenu: [
+            { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+            { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" }
+        ]
+    });
+
+
     if (process.platform === 'darwin') {
-        template.push({
+        template.unshift({
             label: app.getName(),
             submenu: [
                 {
@@ -36,12 +46,43 @@ export default function SetMenu(store) {
                     type: 'separator'
                 },
                 {
-                    label: '推出 Subox',
+                    label: '退出 Subox',
                     role: 'close',
                     accelerator: 'CmdOrCtrl+Q',
                 }
             ]
         })
+    } else {
+        template.push({
+            label: '选项',
+            submenu: [
+                {
+                    label: '设置',
+                    role: 'setting',
+                    click() {
+                        store.dispatch(showSettingDialogAction())
+                    }
+                }
+            ]
+        })
+        template.push({
+            label: '帮助',
+            submenu: [
+                {
+                    label: '关于 Subox',
+                    // role: 'about',
+                    click() {
+                        store.dispatch({
+                            type: 'dosth',
+                            do: {
+                                key: 'aboutDialogDisplay',
+                                value: true
+                            }
+                        })
+                    }
+                }
+            ]
+        });
     }
 
     const menu = Menu.buildFromTemplate(template);

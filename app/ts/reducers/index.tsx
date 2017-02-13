@@ -25,6 +25,10 @@ const common = (state = {}, action) => {
                 mediaFile: void 0,
                 downloadDialogDisplay: false
             })
+        case 'MEDIA_FILTER':
+            return assign({}, state, {
+                mediaFilter: action.words
+            })
         default:
             if (action.do && action.do.key) {
                 let dosth = {};

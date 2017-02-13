@@ -3,6 +3,7 @@ import { updateMediaFiles } from '../actions'
 import * as Path from 'path';
 import * as fs from 'fs';
 import * as assign from 'object-assign';
+import * as _ from 'underscore';
 
 const chokidar = electron.require('chokidar');
 
@@ -15,14 +16,12 @@ const subMediaMathReg = /^(\..*)?$/;
 export default class FileWatchService {
     public static store = void 0;
     public static singleWatcher: FileWatchService = void 0;
-    public path;
     private watcher;
     private mediaFileMap;
     private subFilesArray = [];
     private dispatchTimer;
     private dispatchDely = 2000;
-    constructor(path) {
-        this.path = path;
+    constructor(readonly path: string, readonly ignoredRules: string) {
 
         this.mediaFileMap = FileWatchService.store.getState().mediaFileMap || {};
 
@@ -30,14 +29,33 @@ export default class FileWatchService {
             this.watcher.stop();
         }
 
-        this.watcher = electron.watcher = chokidar.watch(path, 'file, dir, glob, or array', {
-            persistent: true
+        this.watcher = electron.watcher = chokidar.watch(path, {
+            ignored: this.getIgnoredRulesArray(ignoredRules)
+            // ignoreInitial: true
         });
 
         this.watcher
             .on('add', this.onAdded.bind(this))
             .on('unlink', this.onRemoved.bind(this))
         FileWatchService.singleWatcher = this;
+
+        this.dispatch = _.debounce(this.dispatch.bind(this), this.dispatchDely);
+    }
+
+    private getIgnoredRulesArray(ignoredRules: string) {
+        if (ignoredRules) {
+            let irs = ignoredRules.split('|');
+            return irs.map((rule) => {
+                if (rule.substr(0, 2) !== '**') {
+                    return Path.join('**', rule);
+                } else {
+                    return rule;
+                }
+            })
+        } else {
+            return [];
+        }
+
     }
     private onRemoved(path) {
         if (mediaExtReg.test(path)) {
@@ -89,37 +107,38 @@ export default class FileWatchService {
         }
     }
     private dispatch() {
-        if (this.dispatchTimer) {
-            clearTimeout(this.dispatchTimer);
-        }
-        this.dispatchTimer = setTimeout(() => {
-            let result = [];
-            let mediaFileMap = this.mediaFileMap;
-            for (let mediaName in mediaFileMap) {
-                mediaFileMap[mediaName].subs = [];
-                this.subFilesArray.filter((subFilePath) => {
-                    if (Path.dirname(subFilePath) !== Path.dirname(mediaFileMap[mediaName].path)) {
-                        return true;
-                    }
-                    let subName = Path.parse(subFilePath).name;
-
-                    if (this.matchSubFileName(subName, mediaName)) {
-                        let subs = mediaFileMap[mediaName].subs;
-                        subs.push(subFilePath);
-                        mediaFileMap[mediaName].subs = subs;
-                        return false;
-                    }
+        let result = [];
+        let mediaFileMap = this.mediaFileMap;
+        for (let mediaName in mediaFileMap) {
+            mediaFileMap[mediaName].subs = [];
+            this.subFilesArray.filter((subFilePath) => {
+                if (Path.dirname(subFilePath) !== Path.dirname(mediaFileMap[mediaName].path)) {
                     return true;
-                });
-                result.push(mediaFileMap[mediaName]);
-            }
-            this.__doDispatch(result);
-        }, this.dispatchDely);
+                }
+                let subName = Path.parse(subFilePath).name;
+
+                if (this.matchSubFileName(subName, mediaName)) {
+                    let subs = mediaFileMap[mediaName].subs;
+                    subs.push(subFilePath);
+                    mediaFileMap[mediaName].subs = subs;
+                    return false;
+                }
+                return true;
+            });
+            result.push(mediaFileMap[mediaName]);
+        }
+        this.__doDispatch(result);
     }
     private __doDispatch(mediaFileObjects) {
         FileWatchService.store.dispatch(updateMediaFiles(mediaFileObjects))
     }
     public stop() {
         this.watcher.close();
+    }
+    public getIgnoredRules() {
+        return this.ignoredRules;
+    }
+    public getPath() {
+        return this.path
     }
 }

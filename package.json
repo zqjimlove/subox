@@ -49,6 +49,7 @@
     "style-loader": "^0.13.1",
     "ts-loader": "^2.0.0",
     "typescript": "^2.1.5",
+    "underscore": "^1.8.3",
     "url-loader": "^0.5.7",
     "webpack": "^2.2.1"
   },

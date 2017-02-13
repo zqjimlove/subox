@@ -1,7 +1,7 @@
 import Db from '../Db';
 import FileWatch from '../services/FileWatch';
 
-let filewatch: FileWatch;
+let filewatch = FileWatch.singleWatcher;
 
 export const showSettingDialogAction = () => {
     return {
@@ -17,14 +17,14 @@ export const closeSettingDialogAction = () => {
     }
 }
 
-export const changeMediaPathAction = (setting) => {
-    if (filewatch && filewatch.path !== setting.mediaPath) {
+export const changeSettingAction = (setting: Setting) => {
+    if (filewatch && (filewatch.getPath() !== setting.mediaPath || filewatch.getIgnoredRules() !== setting.ignoredRules)) {
         filewatch.stop();
-        filewatch = new FileWatch(setting.mediaPath);
+        filewatch = new FileWatch(setting.mediaPath, setting.ignoredRules);
     }
 
     if (!filewatch) {
-        filewatch = new FileWatch(setting.mediaPath);
+        filewatch = new FileWatch(setting.mediaPath, setting.ignoredRules);
     }
 
     return {
@@ -45,5 +45,12 @@ export const searchSubTitle = (mediaFile) => {
     return {
         type: 'SEARCH_SUBTITLE',
         mediaFile: mediaFile
+    }
+}
+
+export const mediaFilterChange = (str) => {
+    return {
+        type: 'MEDIA_FILTER',
+        words: str
     }
 }
