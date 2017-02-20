@@ -25,4 +25,13 @@ declare module "*.png" {
 
 declare module "*package.json" {
     export const asarVersion: string;
+    export const version: string;
+}
+
+declare var ga: any;
+
+declare var DUOSHUO: any;
+
+interface Window {
+    duoshuoQuery: any
 }

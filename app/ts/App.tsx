@@ -16,10 +16,13 @@ import FileWatch from './services/FileWatch';
 import SetMenu from './Menu';
 
 import CheckUpdate from './services/CheckUpdate';
+import Analytics from './services/Analytics';
 
-
+Analytics.google();
 CheckUpdate.check();
+
 SetMenu(reduxStore);
+
 FileWatch.store = reduxStore;
 
 export default class App {
@@ -28,3 +31,5 @@ export default class App {
     }
 }
 App.app();
+
+

@@ -6,6 +6,9 @@ import A from '../components/SheelA';
 import * as Logo from '../../img/subox.png';
 
 
+import { asarVersion, version } from '../../../package.json';
+
+
 
 class AboutDialog extends React.Component<{ dispatch: Function, show: boolean }, undefined> {
     componentDidMount() {
@@ -50,6 +53,10 @@ class AboutDialog extends React.Component<{ dispatch: Function, show: boolean },
                         博客：<A href="https://inwoo.me">https://inwoo.me</A><br />
                         联系邮箱：<A href="mailTo:zqjimlove@gmail.com">zqjimlove@gmail.com</A> <br />
                         Github：<A href="https://github.com/zqjimlove">https://github.com/zqjimlove</A>
+                    </p>
+                    <p>
+                        版本 {version} <br/>
+                        脚本版本 {asarVersion}
                     </p>
                     <button onClick={this.closeHander.bind(this)} className="close-button" data-close aria-label="Close modal" type="button">
                         <span aria-hidden="true">&times;</span>

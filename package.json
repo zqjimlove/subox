@@ -1,12 +1,13 @@
 {
   "name": "subox",
   "version": "1.0.0",
-  "asarVersion": "1.0.0",
+  "asarVersion": "1.0.1",
   "description": "A subtitle finder",
   "main": "main.js",
   "scripts": {
     "start": "ELECTRON_ENV=development electron .",
-    "build": "node electron.build.js"
+    "build": "node electron.build.js",
+    "build-script" :"NODE_ENV=production webpack"
   },
   "repository": "https://github.com/zqjimlove/subox",
   "keywords": [

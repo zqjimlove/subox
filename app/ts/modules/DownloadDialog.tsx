@@ -8,7 +8,7 @@ import SearchSubService from '../services/SearchSubService';
 
 import Loading from '../components/Loading';
 
-class DownloadDialog extends React.Component<{ show: boolean, dispatch: Function, mediaFile: MediaFileObject }, any> {
+class DownloadDialog extends React.Component<{ show: boolean, dispatch: Function, mediaFile: MediaFileObject}, any> {
     private isMediaPathChange: boolean = false;
     private mediaName;
     private searchText;
@@ -128,10 +128,6 @@ class DownloadDialog extends React.Component<{ show: boolean, dispatch: Function
         this.mediaWillChange();
         let {mediaFile} = this.props;
         let parentDir = '';
-        if (mediaFile) {
-            parentDir = Path.dirname(mediaFile.path);
-            parentDir = parentDir.substr(parentDir.lastIndexOf('/'))
-        }
 
         return (
             <div style={{ display: this.props.show ? 'block' : 'none' }} className="reveal-overlay">
@@ -152,7 +148,6 @@ class DownloadDialog extends React.Component<{ show: boolean, dispatch: Function
                     {this.renderSubTable()}
                     <p className="download-dialog-status">
                         {this.state.subs ? `搜索到 ${this.state.subs.length} 条结果` : '努力搜索中'}
-                        <span className="float-right">{parentDir}</span>
                     </p>
                 </div>
             </div>

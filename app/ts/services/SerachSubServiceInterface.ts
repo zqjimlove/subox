@@ -65,14 +65,18 @@ export abstract class SearchServiceImpl implements SearchServiceInterface {
         if (!name) {
             return []
         }
+
         if (!isCustromName) {
+            ga('send', 'event', 'subtitle', 'auto_search', name)
             return this.searchFromServer(getSearchTextFromFileName(name));
         } else {
+            ga('send', 'event', 'subtitle', 'custom_search', name)
             return this.searchFromServer(name.replace(/\s+/, '.'));
         }
 
     }
     public download(subTitleObj, mediaFileObj, percentCallBack) {
+        ga('send', 'event', 'subtitle', 'download')
         this.getDownloadLink(subTitleObj, mediaFileObj).then((link) => {
             return this.downloadFile(link, percentCallBack);
         }).then((downloadObj) => {
