@@ -1,7 +1,7 @@
 {
   "name": "subox",
   "version": "1.0.0",
-  "asarVersion": "1.0.1",
+  "asarVersion": "2.0.0",
   "description": "A subtitle finder",
   "main": "main.js",
   "scripts": {
