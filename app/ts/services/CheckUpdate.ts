@@ -14,12 +14,11 @@ const AppJSUrl = 'https://cdn.rawgit.com/zqjimlove/subox/master/app/App.js';
 const AppJSPaht = Path.join(electron.app.getAppPath(), '../app.asar.unpacked/', '/app', '/App.js');
 const curAsarVersion = parseInt(asarVersion.replace(/\./g, ''))
 
-
 export default class CheckUpdate {
     static check() {
         Request.getJSON(checkUrl).then((data) => {
             try {
-                let lastAsarVersion = parseInt(data.asarVersion.replace('.', ''));
+                let lastAsarVersion = parseInt(data.asarVersion.replace(/\./g, ''));
                 if (lastAsarVersion > curAsarVersion) {
                     CheckUpdate.update();
                 }
