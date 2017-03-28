@@ -7,7 +7,7 @@
   "scripts": {
     "start": "ELECTRON_ENV=development electron .",
     "build": "node electron.build.js",
-    "build-script" :"NODE_ENV=production webpack"
+    "build-script": "NODE_ENV=production webpack"
   },
   "repository": "https://github.com/zqjimlove/subox",
   "keywords": [
@@ -36,7 +36,7 @@
     "json-loader": "^0.5.4",
     "nedb": "^1.8.0",
     "node-fetch": "^1.6.3",
-    "node-sass": "^4.5.0",
+    "node-sass": "*",
     "object-assign": "^4.1.1",
     "promise": "^7.1.1",
     "react": "^15.4.2",

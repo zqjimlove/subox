@@ -1,6 +1,5 @@
 process.env.NODE_ENV = 'production';
 
-var packager = require('electron-packager');
 var webpack = require("webpack");
 var webpackConfig = require('./webpack.config');
 var path = require('path');
@@ -10,7 +9,6 @@ var Promise = require('Promise');
 
 var builder = require("electron-builder")
 var Platform = builder.Platform
-var electronInstaller = require('electron-winstaller');
 
 function buildTypeScript() {
     return new Promise(function(res, rej) {
